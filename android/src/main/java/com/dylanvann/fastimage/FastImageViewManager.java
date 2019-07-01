@@ -39,9 +39,6 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
     @Nullable
     private RequestManager requestManager = null;
 
-    @Nullable
-    private FastImageSource placeHolderImage = null;
-
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -55,15 +52,6 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
 
         return new FastImageViewWithUrl(reactContext);
     }
-
-    @ReactProp(name="placeholder")
-    public void setPlaceHolder(FastImageViewWithUrl view, @Nullable ReadableMap placeholder){
-
-        if(placeholder == null) return;
-        placeHolderImage = FastImageViewConverter.getImageSource(view.getContext(), placeholder);
-
-    }
-
 
     @ReactProp(name = "source")
     public void setSrc(FastImageViewWithUrl view, @Nullable ReadableMap source) {
