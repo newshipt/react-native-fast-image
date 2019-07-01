@@ -40,7 +40,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
     private RequestManager requestManager = null;
 
     @Nullable
-    private FastImageSource placeHolderImage = null; 
+    private FastImageSource placeHolderImage = null;
 
     @Override
     public String getName() {
@@ -58,8 +58,10 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
 
     @ReactProp(name="placeholder")
     public void setPlaceHolder(FastImageViewWithUrl view, @Nullable ReadableMap placeholder){
-	    final FastImageSource imageSource = FastImageViewConverter.getImageSource(view.getContext(), placeholder);
-	    placeHolderImage = imageSource.getSourceForLoad();
+
+        if(placeholder == null) return;
+        placeHolderImage = FastImageViewConverter.getImageSource(view.getContext(), placeholder);
+
     }
 
 
@@ -114,6 +116,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                     //    - data:image/png;base64
                     .load(imageSource.getSourceForLoad())
                     .apply(FastImageViewConverter.getOptions(context, imageSource, source))
+                    .placeholder(placeHolderImage.getSourceForLoad())
                     .listener(new FastImageRequestListener(key))
                     .into(view);
         }
