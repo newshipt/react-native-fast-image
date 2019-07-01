@@ -10,13 +10,6 @@ react-native-fast-image-*.tgz
 # This probably isn't everything we'd like to ignore but it's good enough.
 .git*
 *.png
-ios/Vendor/SDWebImage/Examples
-ios/Vendor/SDWebImage/Tests
-ios/Vendor/SDWebImage/Docs
-ios/Vendor/SDWebImage/Vendors/FLAnimatedImage/FLAnimatedImageDemo
-ios/Vendor/SDWebImage/Vendors/FLAnimatedImage/images
-ios/Vendor/SDWebImage/Vendors/libwebp/examples
-
 # Examples
 react-native-fast-image-example
 react-native-fast-image-example-cocoapods
