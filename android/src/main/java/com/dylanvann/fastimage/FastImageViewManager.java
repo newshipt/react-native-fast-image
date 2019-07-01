@@ -116,7 +116,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                     //    - data:image/png;base64
                     .load(imageSource.getSourceForLoad())
                     .apply(FastImageViewConverter.getOptions(context, imageSource, source))
-                    .placeholder(placeHolderImage.getSourceForLoad())
+                    .placeholder(R.drawable.placeholder)
                     .listener(new FastImageRequestListener(key))
                     .into(view);
         }
