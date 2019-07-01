@@ -23,10 +23,11 @@ function FastImageBase({
     children,
     fallback,
     forwardedRef,
+    placeholder,
     ...props
 }) {
     const resolvedSource = Image.resolveAssetSource(source)
-
+const resolvedPlaceholder = Image.resolveAssetSource(placeholder);
     if (fallback) {
         return (
             <View style={[styles.imageContainer, style]} ref={forwardedRef}>
@@ -58,6 +59,7 @@ function FastImageBase({
                 onFastImageLoad={onLoad}
                 onFastImageError={onError}
                 onFastImageLoadEnd={onLoadEnd}
+                 placeholder={resolvedPlaceholder}
             />
             {children}
         </View>
