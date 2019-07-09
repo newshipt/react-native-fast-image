@@ -1,11 +1,12 @@
 #import "FFFastImageView.h"
 
-
 @interface FFFastImageView()
 
 @property (nonatomic, assign) BOOL hasSentOnLoadStart;
 @property (nonatomic, assign) BOOL hasCompleted;
 @property (nonatomic, assign) BOOL hasErrored;
+// Whether the latest change of props requires the image to be reloaded
+@property (nonatomic, assign) BOOL needsReload;
 
 @property (nonatomic, strong) NSDictionary* onLoadEvent;
 
@@ -68,9 +69,9 @@
 
 - (UIImage*)makeImage:(UIImage *)image withTint:(UIColor *)color {
     UIImage *newImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0.0);
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, newImage.scale);
     [color set];
-    [newImage drawInRect:CGRectMake(0, 0, newImage.size.width, newImage.size.height)];
+    [newImage drawInRect:CGRectMake(0, 0, image.size.width, newImage.size.height)];
     newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
@@ -97,7 +98,23 @@
 - (void)setSource:(FFFastImageSource *)source {
     if (_source != source) {
         _source = source;
-        
+        _needsReload = YES;
+    }
+}
+
+- (void)didSetProps:(NSArray<NSString *> *)changedProps
+{
+    if (_needsReload) {
+        [self reloadImage];
+    }
+}
+
+- (void)reloadImage
+{
+    _needsReload = NO;
+
+    if (_source) {
+
         // Load base64 images.
         NSString* url = [_source.url absoluteString];
         if (url && [url hasPrefix:@"data:image"]) {
@@ -107,7 +124,7 @@
             } {
                 self.hasSentOnLoadStart = NO;
             }
-            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:_source.url] scale:[[UIScreen mainScreen] scale]];
+            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:_source.url]];
             [self setImage:image];
             if (self.onFastImageProgress) {
                 self.onFastImageProgress(@{
@@ -192,13 +209,6 @@
                                     weakSelf.onFastImageLoadEnd(@{});
                                 }
                         } else {
-                            CGFloat scale = [UIScreen mainScreen].scale;
-                            
-                            if (scale > 1.0) {
-                                image = [UIImage imageWithCGImage:[image CGImage] scale: scale orientation:UIImageOrientationUp];
-                                [weakSelf setImage:image];
-                            }
-                            
                             weakSelf.hasCompleted = YES;
                             [weakSelf sendOnLoad:image];
                             if (weakSelf.onFastImageLoadEnd) {
