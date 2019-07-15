@@ -56,10 +56,10 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
 
     @ReactProp(name="placeholder")
     public void setPlaceHolder(FastImageViewWithUrl view, @Nullable ReadableMap placeholder){
-	    final FastImageSource imageSource = FastImageViewConverter.getImageSource(view.getContext(), placeholder);
-	    placeHolderImage = imageSource.getSourceForLoad();
+        if(placeholder == null) return;
+        final FastImageSource imageSource = FastImageViewConverter.getImageSource(view.getContext(), placeholder);
+        imageSource.getSourceForLoad();
     }
-
 
     @ReactProp(name = "source")
     public void setSrc(FastImageViewWithUrl view, @Nullable ReadableMap source) {
@@ -117,13 +117,6 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                     .listener(new FastImageRequestListener(key))
                     .into(view);
         }
-    }
-
-    @ReactProp(name="placeholder")
-    public void setPlaceHolder(FastImageViewWithUrl view, @Nullable ReadableMap placeholder){
-        if(placeholder == null) return;
-        final FastImageSource imageSource = FastImageViewConverter.getImageSource(view.getContext(), placeholder);
-        imageSource.getSourceForLoad();
     }
 
     @ReactProp(name = "tintColor", customType = "Color")
