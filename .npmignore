@@ -6,9 +6,9 @@ android/build
 ios/build
 react-native-fast-image-*.tgz
 
-# We need to ignore some things in submodules.	
-# This probably isn't everything we'd like to ignore but it's good enough.	
-.git*	
+# We need to ignore some things in submodules.
+# This probably isn't everything we'd like to ignore but it's good enough.
+.git*
 *.png
 # Examples
 ReactNativeFastImageExample
